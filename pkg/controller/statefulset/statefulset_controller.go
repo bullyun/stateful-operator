@@ -3,7 +3,7 @@ package statefulset
 import (
 	"context"
 
-	apiapps "k8s.io/api/apps"
+	apiapps "k8s.io/api/apps/v1"
 	corev1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -99,6 +99,7 @@ func (r *ReconcileStatefulSet) Reconcile(request reconcile.Request) (reconcile.R
 		// Error reading the object - requeue the request.
 		return reconcile.Result{}, err
 	}
+	reqLogger.Info("==================" + instance.Status.String())
 
 	// Define a new Pod object
 	pod := newPodForCR(instance)
