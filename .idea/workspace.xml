@@ -6,10 +6,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="574dc99a-ebc8-4163-9a79-73de7dcd6826" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/build/build.sh" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/build/deploy.sh" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/build/Dockerfile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/deploy.sh" beforeDir="false" afterPath="$PROJECT_DIR$/build/deploy.sh" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
