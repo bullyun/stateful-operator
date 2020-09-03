@@ -99,7 +99,7 @@ func (r *ReconcileStatefulSet) Reconcile(request reconcile.Request) (reconcile.R
 		// Error reading the object - requeue the request.
 		return reconcile.Result{}, err
 	}
-	reqLogger.Info("==================" + instance.Status.String())
+	reqLogger.Info("================== statefulSet:  " + instance.Status.String())
 
 	// Define a new Pod object
 	pod := newPodForCR(instance)
@@ -112,18 +112,21 @@ func (r *ReconcileStatefulSet) Reconcile(request reconcile.Request) (reconcile.R
 	// Check if this Pod already exists
 	found := &corev1.Pod{}
 	err = r.client.Get(context.TODO(), types.NamespacedName{Name: pod.Name, Namespace: pod.Namespace}, found)
-	if err != nil && errors.IsNotFound(err) {
-		reqLogger.Info("Creating a new Pod", "Pod.Namespace", pod.Namespace, "Pod.Name", pod.Name)
-		err = r.client.Create(context.TODO(), pod)
-		if err != nil {
-			return reconcile.Result{}, err
-		}
+	//if err != nil && errors.IsNotFound(err) {
+	//	reqLogger.Info("Creating a new Pod", "Pod.Namespace", pod.Namespace, "Pod.Name", pod.Name)
+	//	err = r.client.Create(context.TODO(), pod)
+	//	if err != nil {
+	//		return reconcile.Result{}, err
+	//	}
+	//
+	//	// Pod created successfully - don't requeue
+	//	return reconcile.Result{}, nil
+	//} else if err != nil {
+	//	return reconcile.Result{}, err
+	//}
 
-		// Pod created successfully - don't requeue
-		return reconcile.Result{}, nil
-	} else if err != nil {
-		return reconcile.Result{}, err
-	}
+	reqLogger.Info("==================statefulSet pod: " + string(found.Status.Phase))
+	reqLogger.Info("==================statefulSet pod: " + string(found.String()))
 
 	// Pod already exists - don't requeue
 	reqLogger.Info("Skip reconcile: Pod already exists", "Pod.Namespace", found.Namespace, "Pod.Name", found.Name)

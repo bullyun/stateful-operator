@@ -7,7 +7,7 @@
   <component name="ChangeListManager">
     <list default="true" id="574dc99a-ebc8-4163-9a79-73de7dcd6826" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/deploy.sh" beforeDir="false" afterPath="$PROJECT_DIR$/build/deploy.sh" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pkg/controller/statefulset/statefulset_controller.go" beforeDir="false" afterPath="$PROJECT_DIR$/pkg/controller/statefulset/statefulset_controller.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -40,6 +40,25 @@
       <recent name="D:\work\git\stateful-operator\build" />
     </key>
   </component>
+  <component name="RunManager">
+    <configuration name="go build github.com/bullyun/stateful-operator/cmd/manager" type="GoApplicationRunConfiguration" factoryName="Go Application" temporary="true" nameIsGenerated="true">
+      <module name="stateful-operator" />
+      <working_directory value="$PROJECT_DIR$" />
+      <envs>
+        <env name="WATCH_NAMESPACE" value="default" />
+      </envs>
+      <kind value="PACKAGE" />
+      <filePath value="$PROJECT_DIR$/cmd/manager/main.go" />
+      <package value="github.com/bullyun/stateful-operator/cmd/manager" />
+      <directory value="$PROJECT_DIR$" />
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Go Build.go build github.com/bullyun/stateful-operator/cmd/manager" />
+      </list>
+    </recent_temporary>
+  </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
@@ -60,6 +79,7 @@
         </entry>
       </map>
     </option>
+    <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VgoProject">
     <integration-enabled>true</integration-enabled>
@@ -78,9 +98,66 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="752" y="352" key="#Go_Modules/0.0.1920.1040@0.0.1920.1040" timestamp="1598594229717" />
+    <state x="414" y="174" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1598609532617">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="414" y="174" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1598609532617" />
+    <state width="1860" height="326" key="GridCell.Tab.0.bottom" timestamp="1598769930634">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1860" height="326" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1598769930634" />
+    <state width="1860" height="326" key="GridCell.Tab.0.center" timestamp="1598769930633">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1860" height="326" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1598769930633" />
+    <state width="1860" height="326" key="GridCell.Tab.0.left" timestamp="1598769930633">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1860" height="326" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1598769930633" />
+    <state width="1860" height="326" key="GridCell.Tab.0.right" timestamp="1598769930634">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1860" height="326" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1598769930634" />
+    <state width="1860" height="326" key="GridCell.Tab.1.bottom" timestamp="1598769930635">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1860" height="326" key="GridCell.Tab.1.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1598769930635" />
+    <state width="1860" height="326" key="GridCell.Tab.1.center" timestamp="1598769930635">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1860" height="326" key="GridCell.Tab.1.center/0.0.1920.1040@0.0.1920.1040" timestamp="1598769930635" />
+    <state width="1860" height="326" key="GridCell.Tab.1.left" timestamp="1598769930635">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1860" height="326" key="GridCell.Tab.1.left/0.0.1920.1040@0.0.1920.1040" timestamp="1598769930635" />
+    <state width="1860" height="326" key="GridCell.Tab.1.right" timestamp="1598769930635">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1860" height="326" key="GridCell.Tab.1.right/0.0.1920.1040@0.0.1920.1040" timestamp="1598769930635" />
     <state x="825" y="125" width="836" height="804" key="find.popup" timestamp="1598594735175">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="825" y="125" width="836" height="804" key="find.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1598594735175" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
+          <url>file://$PROJECT_DIR$/cmd/manager/main.go</url>
+          <line>80</line>
+          <option name="timeStamp" value="3" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
+          <url>file://$USER_HOME$/go/pkg/mod/sigs.k8s.io/controller-runtime@v0.4.0/pkg/client/config/config.go</url>
+          <line>110</line>
+          <option name="timeStamp" value="4" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
+          <url>file://$USER_HOME$/go/pkg/mod/sigs.k8s.io/controller-runtime@v0.4.0/pkg/client/config/config.go</url>
+          <line>119</line>
+          <option name="timeStamp" value="5" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>
