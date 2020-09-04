@@ -2,6 +2,7 @@ package statefulset
 
 import (
 	"context"
+	"time"
 
 	apiapps "k8s.io/api/apps/v1"
 	corev1 "k8s.io/api/core/v1"
@@ -99,7 +100,7 @@ func (r *ReconcileStatefulSet) Reconcile(request reconcile.Request) (reconcile.R
 		// Error reading the object - requeue the request.
 		return reconcile.Result{}, err
 	}
-	reqLogger.Info("================== statefulSet:  " + instance.Status.String())
+	reqLogger.Info(time.Now().String() + "================== statefulSet:  " + instance.Status.String())
 
 	// Define a new Pod object
 	pod := newPodForCR(instance)
@@ -124,9 +125,10 @@ func (r *ReconcileStatefulSet) Reconcile(request reconcile.Request) (reconcile.R
 	//} else if err != nil {
 	//	return reconcile.Result{}, err
 	//}
-
-	reqLogger.Info("==================statefulSet pod: " + string(found.Status.Phase))
-	reqLogger.Info("==================statefulSet pod: " + string(found.String()))
+	reqLogger.Info(time.Now().String() + "==================statefulSet found status: " + string(found.Status.Phase))
+	reqLogger.Info(time.Now().String() + "==================statefulSet found: " + string(found.String()))
+	reqLogger.Info(time.Now().String() + "==================statefulSet pod status: " + string(pod.Status.Phase))
+	reqLogger.Info(time.Now().String() + "==================statefulSet pod: " + string(pod.String()))
 
 	// Pod already exists - don't requeue
 	reqLogger.Info("Skip reconcile: Pod already exists", "Pod.Namespace", found.Namespace, "Pod.Name", found.Name)
