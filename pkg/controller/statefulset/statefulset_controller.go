@@ -120,8 +120,9 @@ func (r *ReconcileStatefulSet) Reconcile(request reconcile.Request) (reconcile.R
 			reqLogger.Info(time.Now().String() + "++++++++++++++++++statefulSet get pod: " + err.Error())
 		}
 		if pod.DeletionTimestamp != nil {
+			var GracePeriodSeconds int64 = 0
 			reqLogger.Info(time.Now().String() + "==================statefulSet pod deletion: " + pod.DeletionTimestamp.String())
-			err = r.client.Delete(context.TODO(), pod)
+			err = r.client.Delete(context.TODO(), pod, &client.DeleteOptions{GracePeriodSeconds: &GracePeriodSeconds})
 			if err != nil {
 				reqLogger.Info(time.Now().String() + "==================delete pod error : " + err.Error())
 			}
