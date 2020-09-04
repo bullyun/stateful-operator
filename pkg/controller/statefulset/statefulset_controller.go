@@ -100,7 +100,7 @@ func (r *ReconcileStatefulSet) Reconcile(request reconcile.Request) (reconcile.R
 		// Error reading the object - requeue the request.
 		return reconcile.Result{}, err
 	}
-	reqLogger.Info(time.Now().String() + "================== statefulSet:  " + instance.Status.String())
+	reqLogger.Info(time.Now().String() + "=========----------- statefulSet:  " + instance.String())
 
 	// Define a new Pod object
 	pod := newPodForCR(instance)
@@ -108,6 +108,18 @@ func (r *ReconcileStatefulSet) Reconcile(request reconcile.Request) (reconcile.R
 	// Set StatefulSet instance as the owner and controller
 	if err := controllerutil.SetControllerReference(instance, pod, r.scheme); err != nil {
 		return reconcile.Result{}, err
+	}
+
+	podNames := getPodNames(instance)
+	for _, podName := range podNames {
+		pod := &corev1.Pod{}
+		err = r.client.Get(context.TODO(), types.NamespacedName{Name: podName, Namespace: instance.Namespace}, pod)
+		if err != nil && errors.IsNotFound(err) {
+			reqLogger.Info(time.Now().String() + "================== not find pod:  " + podName)
+			reqLogger.Info(time.Now().String() + "++++++++++++++++++statefulSet get pod: " + err.Error())
+		}
+		reqLogger.Info(time.Now().String() + "==================statefulSet pod status: " + string(pod.Status.Phase))
+		reqLogger.Info(time.Now().String() + "==================statefulSet pod: " + string(pod.String()))
 	}
 
 	// Check if this Pod already exists
@@ -125,10 +137,6 @@ func (r *ReconcileStatefulSet) Reconcile(request reconcile.Request) (reconcile.R
 	//} else if err != nil {
 	//	return reconcile.Result{}, err
 	//}
-	reqLogger.Info(time.Now().String() + "==================statefulSet found status: " + string(found.Status.Phase))
-	reqLogger.Info(time.Now().String() + "==================statefulSet found: " + string(found.String()))
-	reqLogger.Info(time.Now().String() + "==================statefulSet pod status: " + string(pod.Status.Phase))
-	reqLogger.Info(time.Now().String() + "==================statefulSet pod: " + string(pod.String()))
 
 	// Pod already exists - don't requeue
 	reqLogger.Info("Skip reconcile: Pod already exists", "Pod.Namespace", found.Namespace, "Pod.Name", found.Name)
@@ -142,7 +150,7 @@ func newPodForCR(cr *apiapps.StatefulSet) *corev1.Pod {
 	}
 	return &corev1.Pod{
 		ObjectMeta: metav1.ObjectMeta{
-			Name:      cr.Name + "-pod",
+			Name:      cr.Name,
 			Namespace: cr.Namespace,
 			Labels:    labels,
 		},
@@ -156,4 +164,14 @@ func newPodForCR(cr *apiapps.StatefulSet) *corev1.Pod {
 			},
 		},
 	}
+}
+
+// getPodNames returns the pod names of the array of pods passed in
+func getPodNames(cr *apiapps.StatefulSet) []string {
+	var podNames []string
+	var sum int = int(cr.Status.Replicas)
+	for i := 0; i < sum; i++ {
+		podNames = append(podNames, cr.Name + "-" + string(i))
+	}
+	return podNames
 }
