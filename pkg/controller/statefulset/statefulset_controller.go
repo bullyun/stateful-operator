@@ -113,6 +113,7 @@ func (r *ReconcileStatefulSet) Reconcile(request reconcile.Request) (reconcile.R
 
 	podNames := getPodNames(instance)
 	for _, podName := range podNames {
+		time.Sleep(3000 * time.Millisecond)
 		pod := &corev1.Pod{}
 		err = r.client.Get(context.TODO(), types.NamespacedName{Name: podName, Namespace: instance.Namespace}, pod)
 		if err != nil && errors.IsNotFound(err) {
