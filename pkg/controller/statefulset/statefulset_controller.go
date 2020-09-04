@@ -2,6 +2,7 @@ package statefulset
 
 import (
 	"context"
+	"strconv"
 	"time"
 
 	apiapps "k8s.io/api/apps/v1"
@@ -171,7 +172,7 @@ func getPodNames(cr *apiapps.StatefulSet) []string {
 	var podNames []string
 	var sum int = int(cr.Status.Replicas)
 	for i := 0; i < sum; i++ {
-		podNames = append(podNames, cr.Name + "-" + string(i))
+		podNames = append(podNames, cr.Name + "-" + strconv.Itoa(i))
 	}
 	return podNames
 }
