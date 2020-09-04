@@ -6,6 +6,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="574dc99a-ebc8-4163-9a79-73de7dcd6826" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pkg/controller/statefulset/statefulset_controller.go" beforeDir="false" afterPath="$PROJECT_DIR$/pkg/controller/statefulset/statefulset_controller.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
