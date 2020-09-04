@@ -113,12 +113,14 @@ func (r *ReconcileStatefulSet) Reconcile(request reconcile.Request) (reconcile.R
 
 	podNames := getPodNames(instance)
 	for _, podName := range podNames {
-		time.Sleep(3000 * time.Millisecond)
 		pod := &corev1.Pod{}
 		err = r.client.Get(context.TODO(), types.NamespacedName{Name: podName, Namespace: instance.Namespace}, pod)
 		if err != nil && errors.IsNotFound(err) {
 			reqLogger.Info(time.Now().String() + "================== not find pod:  " + podName)
 			reqLogger.Info(time.Now().String() + "++++++++++++++++++statefulSet get pod: " + err.Error())
+		}
+		if pod.DeletionTimestamp != nil {
+			reqLogger.Info(time.Now().String() + "==================statefulSet pod deletion: " + pod.DeletionTimestamp.String())
 		}
 		reqLogger.Info(time.Now().String() + "==================statefulSet pod status: " + string(pod.Status.Phase))
 		reqLogger.Info(time.Now().String() + "==================statefulSet pod: " + string(pod.String()))
