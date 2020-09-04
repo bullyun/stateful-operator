@@ -111,20 +111,32 @@ func (r *ReconcileStatefulSet) Reconcile(request reconcile.Request) (reconcile.R
 		return reconcile.Result{}, err
 	}
 
-	podNames := getPodNames(instance)
-	for _, podName := range podNames {
-		pod := &corev1.Pod{}
-		err = r.client.Get(context.TODO(), types.NamespacedName{Name: podName, Namespace: instance.Namespace}, pod)
-		if err != nil && errors.IsNotFound(err) {
-			reqLogger.Info(time.Now().String() + "================== not find pod:  " + podName)
-			reqLogger.Info(time.Now().String() + "++++++++++++++++++statefulSet get pod: " + err.Error())
-		}
-		if pod.DeletionTimestamp != nil {
-			reqLogger.Info(time.Now().String() + "==================statefulSet pod deletion: " + pod.DeletionTimestamp.String())
-		}
-		reqLogger.Info(time.Now().String() + "==================statefulSet pod status: " + string(pod.Status.Phase))
-		reqLogger.Info(time.Now().String() + "==================statefulSet pod: " + string(pod.String()))
+	pod1 := &corev1.Pod{}
+	err = r.client.Get(context.TODO(), types.NamespacedName{Namespace: instance.Namespace}, pod1)
+	if err != nil && errors.IsNotFound(err) {
+		reqLogger.Info(time.Now().String() + "================== not find pod:  " + pod1.Name)
+		reqLogger.Info(time.Now().String() + "++++++++++++++++++statefulSet get pod: " + err.Error())
 	}
+	if pod1.DeletionTimestamp != nil {
+		reqLogger.Info(time.Now().String() + "==================statefulSet pod deletion: " + pod1.DeletionTimestamp.String())
+	}
+	reqLogger.Info(time.Now().String() + "==================statefulSet pod status: " + string(pod1.Status.Phase))
+	reqLogger.Info(time.Now().String() + "==================statefulSet pod: " + string(pod1.String()))
+
+	//podNames := getPodNames(instance)
+	//for _, podName := range podNames {
+	//	pod := &corev1.Pod{}
+	//	err = r.client.Get(context.TODO(), types.NamespacedName{Name: podName, Namespace: instance.Namespace}, pod)
+	//	if err != nil && errors.IsNotFound(err) {
+	//		reqLogger.Info(time.Now().String() + "================== not find pod:  " + podName)
+	//		reqLogger.Info(time.Now().String() + "++++++++++++++++++statefulSet get pod: " + err.Error())
+	//	}
+	//	if pod.DeletionTimestamp != nil {
+	//		reqLogger.Info(time.Now().String() + "==================statefulSet pod deletion: " + pod.DeletionTimestamp.String())
+	//	}
+	//	reqLogger.Info(time.Now().String() + "==================statefulSet pod status: " + string(pod.Status.Phase))
+	//	reqLogger.Info(time.Now().String() + "==================statefulSet pod: " + string(pod.String()))
+	//}
 
 	// Check if this Pod already exists
 	found := &corev1.Pod{}
