@@ -13,7 +13,6 @@ import (
 	"k8s.io/apimachinery/pkg/types"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 	"sigs.k8s.io/controller-runtime/pkg/controller"
-	"sigs.k8s.io/controller-runtime/pkg/controller/controllerutil"
 	"sigs.k8s.io/controller-runtime/pkg/handler"
 	logf "sigs.k8s.io/controller-runtime/pkg/log"
 	"sigs.k8s.io/controller-runtime/pkg/manager"
@@ -48,17 +47,14 @@ func add(mgr manager.Manager, r reconcile.Reconciler) error {
 	}
 
 	// Watch for changes to primary resource StatefulSet
-	err = c.Watch(&source.Kind{Type: &apiapps.StatefulSet{}}, &handler.EnqueueRequestForObject{})
-	if err != nil {
-		return err
-	}
+	//err = c.Watch(&source.Kind{Type: &apiapps.StatefulSet{}}, &handler.EnqueueRequestForObject{})
+	//if err != nil {
+	//	return err
+	//}
 
 	// TODO(user): Modify this to be the types you create that are owned by the primary resource
 	// Watch for changes to secondary resource Pods and requeue the owner StatefulSet
-	err = c.Watch(&source.Kind{Type: &corev1.Pod{}}, &handler.EnqueueRequestForOwner{
-		IsController: true,
-		OwnerType:    &apiapps.StatefulSet{},
-	})
+	err = c.Watch(&source.Kind{Type: &corev1.Pod{}}, &handler.EnqueueRequestForObject{})
 	if err != nil {
 		return err
 	}
@@ -89,47 +85,56 @@ func (r *ReconcileStatefulSet) Reconcile(request reconcile.Request) (reconcile.R
 	reqLogger.Info("Reconciling StatefulSet")
 
 	// Fetch the StatefulSet instance
-	instance := &apiapps.StatefulSet{}
-	err := r.client.Get(context.TODO(), request.NamespacedName, instance)
-	if err != nil {
-		if errors.IsNotFound(err) {
-			// Request object not found, could have been deleted after reconcile request.
-			// Owned objects are automatically garbage collected. For additional cleanup logic use finalizers.
-			// Return and don't requeue
-			return reconcile.Result{}, nil
-		}
-		// Error reading the object - requeue the request.
-		return reconcile.Result{}, err
-	}
-	reqLogger.Info(time.Now().String() + "=========----------- statefulSet:  " + instance.String())
+	//instance := &apiapps.StatefulSet{}
+	//err := r.client.Get(context.TODO(), request.NamespacedName, instance)
+	//if err != nil {
+	//	if errors.IsNotFound(err) {
+	//		// Request object not found, could have been deleted after reconcile request.
+	//		// Owned objects are automatically garbage collected. For additional cleanup logic use finalizers.
+	//		// Return and don't requeue
+	//		return reconcile.Result{}, nil
+	//	}
+	//	// Error reading the object - requeue the request.
+	//	return reconcile.Result{}, err
+	//}
+	//reqLogger.Info(time.Now().String() + "=========----------- statefulSet:  " + instance.String())
 
-	// Define a new Pod object
-	pod := newPodForCR(instance)
-
-	// Set StatefulSet instance as the owner and controller
-	if err := controllerutil.SetControllerReference(instance, pod, r.scheme); err != nil {
-		return reconcile.Result{}, err
+	pod := &corev1.Pod{}
+	err := r.client.Get(context.TODO(), request.NamespacedName, pod)
+	if err != nil && errors.IsNotFound(err) {
+		reqLogger.Info(time.Now().String() + "================== not find pod:  " + request.NamespacedName.Name)
+		reqLogger.Info(time.Now().String() + "++++++++++++++++++statefulSet get pod: " + err.Error())
 	}
-
-	podNames := getPodNames(instance)
-	for _, podName := range podNames {
-		pod := &corev1.Pod{}
-		err = r.client.Get(context.TODO(), types.NamespacedName{Name: podName, Namespace: instance.Namespace}, pod)
-		if err != nil && errors.IsNotFound(err) {
-			reqLogger.Info(time.Now().String() + "================== not find pod:  " + podName)
-			reqLogger.Info(time.Now().String() + "++++++++++++++++++statefulSet get pod: " + err.Error())
+	if pod.DeletionTimestamp != nil {
+		var GracePeriodSeconds int64 = 0
+		reqLogger.Info(time.Now().String() + "==================statefulSet pod deletion: " + pod.DeletionTimestamp.String())
+		err = r.client.Delete(context.TODO(), pod, &client.DeleteOptions{GracePeriodSeconds: &GracePeriodSeconds})
+		if err != nil {
+			reqLogger.Info(time.Now().String() + "==================delete pod error : " + err.Error())
 		}
-		if pod.DeletionTimestamp != nil {
-			var GracePeriodSeconds int64 = 0
-			reqLogger.Info(time.Now().String() + "==================statefulSet pod deletion: " + pod.DeletionTimestamp.String())
-			err = r.client.Delete(context.TODO(), pod, &client.DeleteOptions{GracePeriodSeconds: &GracePeriodSeconds})
-			if err != nil {
-				reqLogger.Info(time.Now().String() + "==================delete pod error : " + err.Error())
-			}
-		}
-		reqLogger.Info(time.Now().String() + "==================statefulSet pod status: " + string(pod.Status.Phase))
-		reqLogger.Info(time.Now().String() + "==================statefulSet pod: " + string(pod.String()))
 	}
+	reqLogger.Info(time.Now().String() + "==================statefulSet pod status: " + string(pod.Status.Phase))
+	reqLogger.Info(time.Now().String() + "==================statefulSet pod: " + string(pod.String()))
+
+	//podNames := getPodNames(instance)
+	//for _, podName := range podNames {
+	//	pod := &corev1.Pod{}
+	//	err = r.client.Get(context.TODO(), types.NamespacedName{Name: podName, Namespace: instance.Namespace}, pod)
+	//	if err != nil && errors.IsNotFound(err) {
+	//		reqLogger.Info(time.Now().String() + "================== not find pod:  " + podName)
+	//		reqLogger.Info(time.Now().String() + "++++++++++++++++++statefulSet get pod: " + err.Error())
+	//	}
+	//	if pod.DeletionTimestamp != nil {
+	//		var GracePeriodSeconds int64 = 0
+	//		reqLogger.Info(time.Now().String() + "==================statefulSet pod deletion: " + pod.DeletionTimestamp.String())
+	//		err = r.client.Delete(context.TODO(), pod, &client.DeleteOptions{GracePeriodSeconds: &GracePeriodSeconds})
+	//		if err != nil {
+	//			reqLogger.Info(time.Now().String() + "==================delete pod error : " + err.Error())
+	//		}
+	//	}
+	//	reqLogger.Info(time.Now().String() + "==================statefulSet pod status: " + string(pod.Status.Phase))
+	//	reqLogger.Info(time.Now().String() + "==================statefulSet pod: " + string(pod.String()))
+	//}
 
 	// Check if this Pod already exists
 	found := &corev1.Pod{}
