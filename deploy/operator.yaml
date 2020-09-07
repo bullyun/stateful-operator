@@ -1,25 +1,32 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
+  labels:
+    app: stateful-operator
   name: stateful-operator
+  namespace: bullyun-third
 spec:
   replicas: 1
   selector:
     matchLabels:
-      name: stateful-operator
+      app: stateful-operator
   template:
     metadata:
       labels:
-        name: stateful-operator
+        app: stateful-operator
     spec:
+      terminationGracePeriodSeconds: 70
       serviceAccountName: stateful-operator
+      imagePullSecrets:
+        - name: registry-secret
       containers:
         - name: stateful-operator
-          # Replace this with the built image name
-          image: REPLACE_IMAGE
-          command:
-          - stateful-operator
+          image: registry.cn-hangzhou.aliyuncs.com/bullyun/stateful-operator:1.0
           imagePullPolicy: Always
+          securityContext:
+            privileged: true
+          command:
+            - stateful-operator
           env:
             - name: WATCH_NAMESPACE
               valueFrom:
@@ -31,3 +38,12 @@ spec:
                   fieldPath: metadata.name
             - name: OPERATOR_NAME
               value: "stateful-operator"
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: bullyun.storage.node
+                    values:
+                      - "true"
+                    operator: In
